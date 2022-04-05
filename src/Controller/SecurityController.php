@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\User;
 use App\Form\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,6 +52,30 @@ class SecurityController extends AbstractController
         $user = new User();
 
         $form = $this->createForm(RegisterType::class, $user)->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            // Set des propriétés qui ne sont pas dans le formulaire
+            $user->setCreatedAt(new DateTime());
+            $user->setUpdatedAt(new DateTime());
+            $user->setRoles(['ROLE_USER']);
+
+
+            // Nous devons setter manuellement le hash du password grâce au $passwordHandler et sa méthode hashPassword()
+                # => cette méthode prend 2 paramètres : $user, $plainPassword.
+            $user->setPassword(
+                $passwordHasher->hashPassword(
+                    $user, $form->get('password')->getData()
+                )
+            );
+
+            // On envoie tout en BDD grâce à notre $entityManager
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre inscription est validée. Vous pouvez vous connecter !');
+            return $this->redirectToRoute('app_login');
+        }
 
         return $this->render('security/form_register.html.twig', [
             'form' => $form->createView(),

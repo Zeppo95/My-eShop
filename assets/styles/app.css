@@ -6,6 +6,7 @@
   box-sizing: border-box;
 }
 
+nav,
 body {
-  background-color: #a88e4c !important;
+  background-color: #aee8de !important;
 }
