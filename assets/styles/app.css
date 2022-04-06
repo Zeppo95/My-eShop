@@ -6,7 +6,14 @@
   box-sizing: border-box;
 }
 
-nav,
+nav {
+  background-color: #aee8de;
+}
+
 body {
-  background-color: #aee8de !important;
+  background-color: #ffffff !important;
+}
+
+.footer {
+  background-color: #aee8de;
 }
