@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Commande;
 use DateTime;
 use App\Repository\CommandeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,7 +34,7 @@ class CommandeController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return Response
      */
-    public function softDeleteCommande(Command $commande, EntityManagerInterface $entityManager): Response
+    public function softDeleteCommande(Commande $commande, EntityManagerInterface $entityManager): Response
     {
         $commande->setDeletedAt(new DateTime());
         $commande->setState('annulée');
@@ -59,6 +59,39 @@ class CommandeController extends AbstractController
         return $this->render('admin/trash/show_canceled_commandes.html.twig', [
             'canceled_commandes' => $canceledCommandes
         ]);
+    }
+
+    /**
+     * @Route("/restaure-une-commande/{id}", name="restore_commande", methods={"GET"})
+     * @param Commande $commande
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    public function restoreCommande(Commande $commande, EntityManagerInterface $entityManager): Response
+    {
+        $commande->setDeletedAt(null);
+        $commande->setState("en cours");
+
+        $entityManager->persist($commande);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('show_canceled_commandes');
+    }
+
+    /**
+     * @route("/supprimer-une-commande/{id}", name="hard_delete_commande", methods={"GET"})
+     * @param Commande $commande
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    public function hardDeleteCommande(Commande $commande, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($commande);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'La commande a bien été supprimée.');
+        return $this->redirectToRoute('show_canceled_commandes');
+
     }
 
 }
