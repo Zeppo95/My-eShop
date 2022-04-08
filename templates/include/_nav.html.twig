@@ -38,17 +38,22 @@
                   <li><a class="dropdown-item" href="{{ path('show_dashboard') }}">Dashboard</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="{{ path('show_produit') }}">Gestion de produits</a></li>
-                  <li><a class="dropdown-item" href="#">Gestion de commandes</a></li>            
+                  <li><a class="dropdown-item" href="{{ path('show_commandes') }}">Gestion de commandes</a></li>            
                   <li><a class="dropdown-item" href="#">Gestion des membres</a></li>
                 </ul>
             </li>
 
-            {% endif %}
+
+             {% endif %}
         {% endif %}
-        {# <li class="nav-item"> #}
-          <!-- // <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> //-->
-        {# </li> #}
-        </ul>
+        
+          </ul>
+
+           
+            <div class="me-5">
+              <a class="btn btn-warning" href="{{ path('show_panier') }}"><i class="fa-solid fa-cart-arrow-down"></i> Panier</a>
+            </div>
+        
       <!--// <form class="d-flex">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
