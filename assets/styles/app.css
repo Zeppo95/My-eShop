@@ -1,3 +1,19 @@
+*,
+::before,
+::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+nav {
+  background-color: #aee8de;
+}
+
 body {
-    background-color: lightgray;
+  background-color: #ffffff !important;
+}
+
+.footer {
+  background-color: #aee8de;
 }
